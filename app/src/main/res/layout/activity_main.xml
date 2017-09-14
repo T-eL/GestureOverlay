@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.gesture.GestureOverlayView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gesture"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#009688"
+    android:gestureColor="#333639"
+
+    android:gestureStrokeAngleThreshold="90"
+    tools:context="com.example.edwards_inc.gestureoverlay.MainActivity">
+
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gestureStrokeAngleThreshold="90"
+        android:text="Gesture Recognition"
+        android:textSize="30sp" />
+</android.gesture.GestureOverlayView>
