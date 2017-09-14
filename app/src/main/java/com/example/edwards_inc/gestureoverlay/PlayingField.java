@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.PathShape;
@@ -19,30 +20,27 @@ import android.view.View;
 public class PlayingField extends View {
     private ShapeDrawable shape;
     private Path path;
-    private int x;
-    private int y;
-    private int left;
-    private int right;
-    private int top;
-    private int bottom;
-    private boolean retVal;
+    private PathMeasure reader;
+    private int x;      private int y;
+    private int left;   private int right;
+    private int top;    private int bottom;
+
+    private float [] sPosition = {0, 0};
+    private float [] ePosition = {0, 0};
 
     public PlayingField(Context context) {
         super(context);
         shape = new ShapeDrawable();
-        path = null;
-        x = 0;
-        y = 0;
-        retVal = false;
+        path = new Path();
+        reader = new PathMeasure();
+        x = 0;  y = 0;
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
+        this.left = left;   this.right = right;
+        this.top = top;     this.bottom = bottom;
     }
     
     @Override
@@ -57,7 +55,7 @@ public class PlayingField extends View {
         y = (int) toParse.getBoundingBox().centerY();
         int width = right - left;
         int height = bottom - top;
-        path = toParse.toPath();
+        path.set(toParse.toPath());
         switch(Name) {
             case "Square":
                 shape.setShape(new RectShape());
@@ -68,6 +66,12 @@ public class PlayingField extends View {
                 shape.setBounds(x-100, y-100, x+100, y+100);
                 break;
             case "Line":
+                reader.setPath(path, false);
+                reader.getPosTan(0, sPosition, null);
+                reader.getPosTan(reader.getLength(), ePosition, null);
+                path.reset();
+                path.moveTo(sPosition[0], sPosition[1]);
+                path.lineTo(ePosition[0], ePosition[1]);
                 shape.setShape(new PathShape(path, width, height));
                 shape.setBounds(left, top, right, bottom);
                 break;
