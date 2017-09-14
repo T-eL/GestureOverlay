@@ -3,6 +3,8 @@ package com.example.edwards_inc.gestureoverlay;
 import android.content.Context;
 import android.gesture.Gesture;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -27,7 +29,7 @@ public class PlayingField extends View {
 
     public PlayingField(Context context) {
         super(context);
-        shape = null;
+        shape = new ShapeDrawable();
         path = null;
         x = 0;
         y = 0;
@@ -58,27 +60,38 @@ public class PlayingField extends View {
         path = toParse.toPath();
         switch(Name) {
             case "Square":
-                shape = new ShapeDrawable(new RectShape());
+                shape.setShape(new RectShape());
                 shape.setBounds(x-100, y-100, x+100, y+100);
                 break;
             case "Circle":
-                shape = new ShapeDrawable(new OvalShape());
+                shape.setShape(new OvalShape());
                 shape.setBounds(x-100, y-100, x+100, y+100);
                 break;
             case "Line":
-                shape = new ShapeDrawable(new PathShape(path, width, height));
+                shape.setShape(new PathShape(path, width, height));
                 shape.setBounds(left, top, right, bottom);
                 break;
             case "Triangle":
-                shape = new ShapeDrawable(new PathShape(path, width, height));
+                shape.setShape(new PathShape(path, width, height));
                 shape.setBounds(left, top, right, bottom);
                 break;
             case "Z":
-                shape = new ShapeDrawable(new PathShape(path, width, height));
+                shape.setShape(new PathShape(path, width, height));
                 shape.setBounds(left, top, right, bottom);
                 break;
             default:
                 return false;
+        }
+        if(shape.getShape() instanceof PathShape) {
+            shape.getPaint().setColor(Color.BLACK);
+            shape.getPaint().setStyle(Paint.Style.STROKE);
+            shape.getPaint().setStrokeJoin(Paint.Join.ROUND);
+            shape.getPaint().setStrokeCap(Paint.Cap.ROUND);
+            shape.getPaint().setStrokeWidth(50);
+        }
+        else {
+            shape.getPaint().setColor(Color.BLUE);
+            shape.getPaint().setStyle(Paint.Style.FILL);
         }
         return true;
     }
